@@ -18,9 +18,6 @@
 
 import bpy
 from os import path
-from contextlib import redirect_stdout
-import io
-from shutil import copyfile
 
 bl_info = {
     "name": "Render Animatic",
@@ -38,6 +35,9 @@ blender28 = bpy.app.version[0] == 2 and bpy.app.version[1] >= 80 or bpy.app.vers
 
 def collect_keyframes(scene, start, end):
     """Return a list of keyframes visible in the timeline within given frame range"""
+    from contextlib import redirect_stdout
+    import io
+
     frames = []
     orig_frame = scene.frame_current
     scene.frame_set(end + 1)
@@ -140,6 +140,8 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
 
     def duplicate_image(self, scene):
         if self.use_duplication and self.frames:
+            from shutil import copyfile
+
             base_src, ext_src = path.splitext(scene.render.filepath)
             scene.render.filepath = self.orig_output_path
 
