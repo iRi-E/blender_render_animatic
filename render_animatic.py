@@ -331,12 +331,12 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
         return {'FINISHED'}
 
 
-def view3d_header_render_animatic(self, context):
+def render_animatic_button(self, context):
     layout = self.layout
     layout.operator("render.render_animatic", text="Animatic", icon='RENDER_ANIMATION')
 
 
-def info_menu_render_animatic(self, context):
+def render_animatic_menu(self, context):
     layout = self.layout
     layout.separator()
     layout.operator("render.render_animatic", icon='RENDER_ANIMATION')
@@ -344,20 +344,20 @@ def info_menu_render_animatic(self, context):
 
 def register():
     bpy.utils.register_class(RENDER_OT_render_animatic)
-    bpy.types.VIEW3D_HT_header.append(view3d_header_render_animatic)
+    bpy.types.VIEW3D_HT_header.append(render_animatic_button)
     if blender28:
-        bpy.types.TOPBAR_MT_render.append(info_menu_render_animatic)
+        bpy.types.TOPBAR_MT_render.append(render_animatic_menu)
     else:
-        bpy.types.INFO_MT_render.append(info_menu_render_animatic)
+        bpy.types.INFO_MT_render.append(render_animatic_menu)
 
 
 def unregister():
     bpy.utils.unregister_class(RENDER_OT_render_animatic)
-    bpy.types.VIEW3D_HT_header.remove(view3d_header_render_animatic)
+    bpy.types.VIEW3D_HT_header.remove(render_animatic_button)
     if blender28:
-        bpy.types.TOPBAR_MT_render.remove(info_menu_render_animatic)
+        bpy.types.TOPBAR_MT_render.remove(render_animatic_menu)
     else:
-        bpy.types.INFO_MT_render.remove(info_menu_render_animatic)
+        bpy.types.INFO_MT_render.remove(render_animatic_menu)
 
 
 if __name__ == "__main__":
