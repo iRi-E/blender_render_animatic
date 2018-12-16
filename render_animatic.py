@@ -344,20 +344,22 @@ def render_animatic_menu(self, context):
 
 def register():
     bpy.utils.register_class(RENDER_OT_render_animatic)
-    bpy.types.VIEW3D_HT_header.append(render_animatic_button)
     if blender28:
         bpy.types.TOPBAR_MT_render.append(render_animatic_menu)
+        bpy.types.VIEW3D_MT_view.append(render_animatic_menu)
     else:
         bpy.types.INFO_MT_render.append(render_animatic_menu)
+        bpy.types.VIEW3D_HT_header.append(render_animatic_button)
 
 
 def unregister():
     bpy.utils.unregister_class(RENDER_OT_render_animatic)
-    bpy.types.VIEW3D_HT_header.remove(render_animatic_button)
     if blender28:
         bpy.types.TOPBAR_MT_render.remove(render_animatic_menu)
+        bpy.types.VIEW3D_MT_view.remove(render_animatic_menu)
     else:
         bpy.types.INFO_MT_render.remove(render_animatic_menu)
+        bpy.types.VIEW3D_HT_header.remove(render_animatic_button)
 
 
 if __name__ == "__main__":
