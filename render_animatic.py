@@ -24,7 +24,7 @@ bl_info = {
     "description": "Render only keyframes or only frames pointed to by markers",
     "author": "IRIE Shinsuke",
     "version": (0, 2, 0),
-    "blender": (2, 80, 0),
+    "blender": (2, 80, 0),  # or (2, 79, 0)
     "location": "Topbar > Render > Render Animatic",
     "tracker_url": "https://github.com/iRi-E/blender_render_animatic/issues",
     "category": "Render"
@@ -33,6 +33,7 @@ bl_info = {
 blender28 = bpy.app.version[0] == 2 and bpy.app.version[1] >= 80 or bpy.app.version[0] >= 3
 
 
+# utility functions
 def collect_keyframes(scene, start, end):
     """Return a list of keyframes visible in the timeline within given frame range"""
     from contextlib import redirect_stdout
@@ -68,6 +69,7 @@ def is_v3d_persp_camera(context):
     return v3d is None or v3d.spaces[0].camera and v3d.spaces[0].region_3d.view_perspective == 'CAMERA'
 
 
+# operator
 class RENDER_OT_render_animatic(bpy.types.Operator):
     """Render only keyframes or only frames pointed to by markers"""
     bl_idname = "render.render_animatic"
@@ -129,6 +131,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
         self.retry = False
         self.view_suffixes = []
 
+    # internal functions
     def timer_unset(self, context):
         if self.timer:
             context.window_manager.event_timer_remove(self.timer)
@@ -164,6 +167,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
                     else:
                         print("skipping existing frame \"{}\"".format(path_dest))
 
+    # callbacks
     def render_start(self, dummy):
         self.started = True
 
@@ -180,6 +184,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
         self.rendering = False
         self.cancelled = True
 
+    # methods
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self, width=250)
 
@@ -331,6 +336,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
         return {'FINISHED'}
 
 
+# user interface
 def render_animatic_button(self, context):
     layout = self.layout
     layout.operator("render.render_animatic", text="Animatic", icon='RENDER_ANIMATION')
@@ -342,6 +348,7 @@ def render_animatic_menu(self, context):
     layout.operator("render.render_animatic", icon='RENDER_ANIMATION')
 
 
+# register addon
 def register():
     bpy.utils.register_class(RENDER_OT_render_animatic)
     if blender28:
