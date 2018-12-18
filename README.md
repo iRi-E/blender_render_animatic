@@ -6,12 +6,15 @@ This program was initially based on another addon with the same name which was p
 
 ---
 
-## Screenshot
+## Usage
 
-Invoke the popup dialog by pressing [:clapper: Animatic] button in the 3D View header:
+Select menu (Topbar > Render > Render Animatic)
 
-![screenshot](https://raw.githubusercontent.com/iRi-E/blender_render_animatic/images/screenshot_dialog.png)
+![topbar_menu](https://raw.githubusercontent.com/iRi-E/blender_render_animatic/images/screenshot_topbar_menu.png)
 
+In the popup dialog, set options and click OK button to start rendering
+
+![popup_dialog](https://raw.githubusercontent.com/iRi-E/blender_render_animatic/images/screenshot_popup_dialog.png)
 
 ## Render Options
 
