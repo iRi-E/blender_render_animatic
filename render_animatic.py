@@ -247,8 +247,9 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
                 self.frames.append(end)
 
         if self.use_duplication and scene.render.use_multiview:
-            # if not self.use_opengl or not self.use_view_context or is_v3d_persp_camera(context):
-            if not self.use_opengl or self.use_view_context and is_v3d_persp_camera(context):  # workaround T58517
+            if not self.use_opengl or (
+                    not self.use_view_context or is_v3d_persp_camera(context) if blender28 else
+                    self.use_view_context and is_v3d_persp_camera(context)):  # workaround T58517
                 views = scene.render.views[:2 if scene.render.views_format == 'STEREO_3D' else None]
                 self.view_suffixes = [view.file_suffix for view in views if view.use]
             print("Multiview file suffixes: {}".format(self.view_suffixes))
