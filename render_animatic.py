@@ -166,10 +166,10 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
                         print("skipping existing frame \"{}\"".format(path_dest))
 
     # callbacks
-    def render_start(self, dummy):
+    def render_start(self, dummy1, dummy2=None):
         self.started = True
 
-    def render_end(self, scene):
+    def render_end(self, scene, dummy=None):
         if self.started:
             self.num_rendered += 1
             self.duplicate_image(scene)
@@ -178,7 +178,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
 
         self.rendering = False
 
-    def render_cancel(self, dummy):
+    def render_cancel(self, dummy1, dummy2=None):
         self.rendering = False
         self.cancelled = True
 
