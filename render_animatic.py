@@ -24,13 +24,11 @@ bl_info = {
     "description": "Render only keyframes or only frames pointed to by markers",
     "author": "IRIE Shinsuke",
     "version": (0, 3, 1),
-    "blender": (2, 80, 0),  # or (2, 79, 0)
+    "blender": (2, 80, 0),
     "location": "Topbar > Render > Render Animatic",
     "tracker_url": "https://github.com/iRi-E/blender_render_animatic/issues",
     "category": "Render"
 }
-
-blender28 = bpy.app.version[0] == 2 and bpy.app.version[1] >= 80 or bpy.app.version[0] >= 3
 
 
 # utility functions
@@ -76,41 +74,41 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
     bl_label = "Render Animatic"
     bl_options = {'REGISTER'}
 
-    filter_type = bpy.props.EnumProperty(
+    filter_type: bpy.props.EnumProperty(
         name="Filter Type",
         description="How to pick frames to render",
         items=[
             ('STEP', "Step",
              "Use constant frame steps same as the regular animation render",
-             'CENTER_ONLY' if blender28 else 'ALIGN', 0),
+             'CENTER_ONLY', 0),
             ('KEYFRAME', "Keyframes",
              "Render only keyframes visible in the current timeline",
-             'KEYFRAME_HLT' if blender28 else 'SPACE2', 1),
+             'KEYFRAME_HLT', 1),
             ('MARKER', "Markers",
              "Render only frames pointed to by markers",
              'MARKER_HLT', 2)],
         default='KEYFRAME'
         )
 
-    use_opengl = bpy.props.BoolProperty(
+    use_opengl: bpy.props.BoolProperty(
         name="Viewport Render",
         description="Use the viewport render instead of the actual rendering engine",
         default=False
         )
 
-    use_both_ends = bpy.props.BoolProperty(
+    use_both_ends: bpy.props.BoolProperty(
         name="In and Out Points",
         description="Write the start and end frames of the rendering range as well",
         default=False
         )
 
-    use_duplication = bpy.props.BoolProperty(
+    use_duplication: bpy.props.BoolProperty(
         name="Frame Duplication",
         description="Copy rendered frames to fill gaps in the image sequence",
         default=False
         )
 
-    use_view_context = bpy.props.BoolProperty(
+    use_view_context: bpy.props.BoolProperty(
         name="View Context",
         description="Take snapshots of the active viewport instead of the current scene",
         default=False
@@ -200,8 +198,8 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
 
         col = layout.column()
         col.prop(self, "use_opengl", icon='VIEW3D')
-        col.prop(self, "use_both_ends", icon='TRACKING_FORWARDS_SINGLE' if blender28 else 'OUTLINER_DATA_ARMATURE')
-        col.prop(self, "use_duplication", icon='DUPLICATE' if blender28 else 'GHOST')
+        col.prop(self, "use_both_ends", icon='TRACKING_FORWARDS_SINGLE')
+        col.prop(self, "use_duplication", icon='DUPLICATE')
 
         col = layout.column()
         col.active = self.use_opengl
@@ -247,9 +245,7 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
                 self.frames.append(end)
 
         if self.use_duplication and scene.render.use_multiview:
-            if not self.use_opengl or (
-                    not self.use_view_context or is_v3d_persp_camera(context) if blender28 else
-                    self.use_view_context and is_v3d_persp_camera(context)):  # workaround T58517
+            if not self.use_opengl or not self.use_view_context or is_v3d_persp_camera(context):
                 views = scene.render.views[:2 if scene.render.views_format == 'STEREO_3D' else None]
                 self.view_suffixes = [view.file_suffix for view in views if view.use]
             print("Multiview file suffixes: {}".format(self.view_suffixes))
@@ -352,22 +348,14 @@ def render_animatic_menu(self, context):
 # register addon
 def register():
     bpy.utils.register_class(RENDER_OT_render_animatic)
-    if blender28:
-        bpy.types.TOPBAR_MT_render.append(render_animatic_menu)
-        bpy.types.VIEW3D_MT_view.append(render_animatic_menu)
-    else:
-        bpy.types.INFO_MT_render.append(render_animatic_menu)
-        bpy.types.VIEW3D_HT_header.append(render_animatic_button)
+    bpy.types.TOPBAR_MT_render.append(render_animatic_menu)
+    bpy.types.VIEW3D_MT_view.append(render_animatic_menu)
 
 
 def unregister():
     bpy.utils.unregister_class(RENDER_OT_render_animatic)
-    if blender28:
-        bpy.types.TOPBAR_MT_render.remove(render_animatic_menu)
-        bpy.types.VIEW3D_MT_view.remove(render_animatic_menu)
-    else:
-        bpy.types.INFO_MT_render.remove(render_animatic_menu)
-        bpy.types.VIEW3D_HT_header.remove(render_animatic_button)
+    bpy.types.TOPBAR_MT_render.remove(render_animatic_menu)
+    bpy.types.VIEW3D_MT_view.remove(render_animatic_menu)
 
 
 if __name__ == "__main__":
