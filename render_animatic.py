@@ -23,7 +23,7 @@ bl_info = {
     "name": "Render Animatic",
     "description": "Render only keyframes or only frames pointed to by markers",
     "author": "IRIE Shinsuke",
-    "version": (0, 3, 1),
+    "version": (0, 4, 0),
     "blender": (2, 80, 0),
     "location": "Topbar > Render > Render Animatic",
     "tracker_url": "https://github.com/iRi-E/blender_render_animatic/issues",
