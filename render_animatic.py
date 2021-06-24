@@ -334,11 +334,6 @@ class RENDER_OT_render_animatic(bpy.types.Operator):
 
 
 # user interface
-def render_animatic_button(self, context):
-    layout = self.layout
-    layout.operator("render.render_animatic", text="Animatic", icon='RENDER_ANIMATION')
-
-
 def render_animatic_menu(self, context):
     layout = self.layout
     layout.separator()
